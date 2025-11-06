@@ -1,0 +1,28 @@
+{
+	"name": "fullcalendar-for-frappe",
+	"version": "0.1.0",
+	"description": "Adds a \"Fullcalendar\" block to the editor which fetches Events from an API",
+	"author": "The WordPress Contributors",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build --webpack-copy-php --blocks-manifest",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --webpack-copy-php --blocks-manifest"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.27.0"
+	},
+	"dependencies": {
+		"@fullcalendar/core": "^6.1.19",
+		"@fullcalendar/daygrid": "^6.1.19",
+		"@fullcalendar/list": "^6.1.19",
+		"@fullcalendar/react": "^6.1.19",
+		"@fullcalendar/timegrid": "^6.1.19",
+		"fullcalendar": "^6.1.19"
+	}
+}
