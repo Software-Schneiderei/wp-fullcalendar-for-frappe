@@ -24,7 +24,7 @@ import './editor.scss';
 /**
  * Plugin-specific imports
  */
-import { PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody, TextControl, TextareaControl } from '@wordpress/components';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -36,7 +36,7 @@ import { PanelBody, TextControl } from '@wordpress/components';
  */
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { eventsUrl } = attributes;
+	const { eventsUrl, calendarOptions } = attributes;
 
 	// Editor preview: static placeholder only. FullCalendar runs on the frontend.
 	return (
@@ -46,15 +46,36 @@ export default function Edit( { attributes, setAttributes } ) {
 					title={ __( 'Settings', 'fullcalendar-for-frappe' ) }
 				>
 					<TextControl
-						__nextHasNoMarginyarBottom
 						__next40pxDefaultSize
 						label={ __(
 							'URL für Termine',
 							'fullcalendar-for-frappe'
 						) }
+						help={ __(
+							'Response must be a JSON-object with a "data" key as the root node',
+							'fullcalendar-for-frappe'
+						) }
 						value={ eventsUrl || '' }
 						onChange={ ( value ) =>
 							setAttributes( { eventsUrl: value } )
+						}
+					/>
+					<TextareaControl
+						help="enter JSON with options that should be passed to Fullcalendar (see https://fullcalendar.io/docs)"
+						label={ __(
+							'Kalender Optionen (JSON)',
+							'fullcalendar-for-frappe'
+						) }
+						value={ calendarOptions || '' }
+						placeholder="{
+							locale: 'de',
+							firstDay: 1,
+							headerToolbar: {
+								left: 'prev,today,next',
+							}
+						}"
+						onChange={ ( value ) =>
+							setAttributes( { calendarOptions: value } )
 						}
 					/>
 				</PanelBody>
@@ -64,7 +85,6 @@ export default function Edit( { attributes, setAttributes } ) {
 					Hier wird auf der veröffentlichten Seite ein Kalender mit
 					Terminen angezeigt.
 				</div>
-				<div>URl für Termine: { eventsUrl }</div>
 			</div>
 		</>
 	);

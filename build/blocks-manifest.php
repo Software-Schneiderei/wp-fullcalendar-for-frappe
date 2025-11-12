@@ -43,6 +43,9 @@ return array(
 		'attributes' => array(
 			'eventsUrl' => array(
 				'type' => 'string'
+			),
+			'calendarOptions' => array(
+				'type' => 'string'
 			)
 		)
 	)

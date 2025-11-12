@@ -38,6 +38,9 @@
   "attributes": {
     "eventsUrl": {
       "type": "string"
+    },
+    "calendarOptions": {
+      "type": "string"
     }
   }
 }

@@ -17,7 +17,12 @@
  */
 $wrapper_attrs = get_block_wrapper_attributes();
 $events_url = isset( $attributes['eventsUrl'] ) ? $attributes['eventsUrl'] : '';
+$calendar_options = isset( $attributes['calendarOptions'] ) ? $attributes['calendarOptions'] : '';
 ?>
 <div <?php echo $wrapper_attrs; ?>>
-	<div class="fullcalendar-for-frappe__root" data-events-url="<?php echo esc_attr( $events_url ); ?>"></div>
+	<div 
+		class="fullcalendar-for-frappe__root"
+		data-events-url="<?php echo esc_attr( $events_url ); ?>" 
+		data-calendar-options="<?php echo esc_attr( $calendar_options ); ?>">
+	</div>
 </div>

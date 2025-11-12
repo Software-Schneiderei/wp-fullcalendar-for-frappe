@@ -49,73 +49,43 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		const eventsUrl = root.getAttribute( 'data-events-url' ) || '';
 		const calendarEl = document.createElement( 'div' );
 
-		root.appendChild( calendarEl );
-
-		const calendar = new Calendar( calendarEl, {
+		const staticCalendarOptions = {
 			plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
-			initialView: 'dayGridMonth',
-			headerToolbar: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'dayGridMonth,timeGridWeek,listWeek',
-			},
-			// Provide events via an async fetch so the API can accept start/end params
-			events( info, successCallback, failureCallback ) {
-				if ( ! eventsUrl ) {
-					successCallback( [] );
-					return;
-				}
-
-				// Build URL safely ( support relative URLs )
-				let url;
-				try {
-					url = new URL( eventsUrl );
-				} catch ( e ) {
-					url = new URL( eventsUrl, window.location.origin );
-				}
-
-				url.searchParams.set( 'start', info.startStr );
-				url.searchParams.set( 'end', info.endStr );
-
-				fetch( url.toString(), {
-					method: 'GET',
-					credentials: 'same-origin',
-					headers: { Accept: 'application/json' },
-				} )
-					.then( function ( response ) {
-						if ( ! response.ok ) {
-							throw new Error(
-								`${ response.status } ${ response.statusText }`
-							);
-						}
-						return response.json();
-					} )
-					.then( function ( response ) {
-						const events = Array.isArray( response.data )
-							? response.data
-							: [ response.data ];
-						successCallback( events );
-					} )
-					.catch( function ( err ) {
-						console.error(
-							`FullCalendar: Failed to fetch events from ${ eventsUrl }`,
-							err
+			events: {
+				url: eventsUrl,
+				success( response ) {
+					const events = response.data;
+					Array.prototype.slice
+						.call( events )
+						.forEach(
+							( event ) =>
+								( event.title = pluralize(
+									event.anzahl,
+									' Termin verfügbar',
+									' Termine verfügbar'
+								) )
 						);
-						failureCallback( err );
-					} );
+					return events;
+				},
 			},
-			// optional: show loading indicator via FullCalendar callbacks
-			loading( isLoading ) {
-				if ( isLoading ) {
-					root.classList.add( 'fc-loading' );
-				} else {
-					root.classList.remove( 'fc-loading' );
-				}
-			},
-		} );
+		};
+
+		root.appendChild( calendarEl );
+		const customCalendarOptions = JSON.parse(
+			root.getAttribute( 'data-calendar-options' ) || '{}'
+		);
+		const calendarOptions = {
+			...staticCalendarOptions,
+			...customCalendarOptions,
+		};
+		const calendar = new Calendar( calendarEl, calendarOptions );
 
 		calendar.render();
 		root.__fc_initialized = true;
 	} );
 } );
+
+function pluralize( count, singularString, pluralString ) {
+	return count + ( count === 1 ? singularString : pluralString );
+}
 /* eslint-enable no-console */
