@@ -37,7 +37,10 @@ import { PanelBody, TextControl, TextareaControl } from '@wordpress/components';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const { eventsUrl, calendarOptions } = attributes;
-
+	const exampleCalendarOptions = `{
+	"locale": "de",
+	"firstDay": 1
+}`;
 	// Editor preview: static placeholder only. FullCalendar runs on the frontend.
 	return (
 		<>
@@ -67,13 +70,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							'fullcalendar-for-frappe'
 						) }
 						value={ calendarOptions || '' }
-						placeholder="{
-							locale: 'de',
-							firstDay: 1,
-							headerToolbar: {
-								left: 'prev,today,next',
-							}
-						}"
+						placeholder={ exampleCalendarOptions }
 						onChange={ ( value ) =>
 							setAttributes( { calendarOptions: value } )
 						}
