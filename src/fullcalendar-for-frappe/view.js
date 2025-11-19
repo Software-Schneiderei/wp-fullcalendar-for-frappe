@@ -46,7 +46,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			return;
 		}
 
-		const eventsUrl = root.getAttribute( 'data-events-url' ) || '';
+		const  eventsUrl = root.getAttribute( 'data-events-url' ) || '';
 		const calendarEl = document.createElement( 'div' );
 
 		const staticCalendarOptions = {
@@ -61,8 +61,8 @@ document.addEventListener( 'DOMContentLoaded', function () {
 							( event ) =>
 								( event.title = pluralize(
 									event.anzahl,
-									' Termin verfügbar',
-									' Termine verfügbar'
+									' Platz verfügbar',
+									' Plätze verfügbar'
 								) )
 						);
 					return events;
