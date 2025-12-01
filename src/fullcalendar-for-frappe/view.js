@@ -33,6 +33,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 
+const EVENT_SRC_PER_TIMESLOT_ID = 'srcPerTimeSlot';
+const EVENT_SRC_PER_DAY_ID = 'srcPerDay';
+
 /* eslint-disable no-console */
 document.addEventListener( 'DOMContentLoaded', function () {
 	const roots = document.querySelectorAll( '.fullcalendar-for-frappe__root' );
@@ -46,27 +49,60 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			return;
 		}
 
-		const  eventsUrl = root.getAttribute( 'data-events-url' ) || '';
+		const eventsPerTimeslotUrl =
+			root.getAttribute( 'data-events-per-timeslot-url' ) || '';
+		const eventsPerDayUrl =
+			root.getAttribute( 'data-events-per-day-url' ) || '';
 		const calendarEl = document.createElement( 'div' );
+
+		const sources = {
+			srcPerTimeSlot: {
+				id: EVENT_SRC_PER_TIMESLOT_ID,
+				url: eventsPerTimeslotUrl,
+				success: ( response ) => response.data,
+				eventDataTransform( eventData ) {
+					eventData.title = pluralize(
+						eventData.anzahl,
+						' Platz frei',
+						' Plätze frei'
+					);
+					return eventData;
+				},
+			},
+			srcPerDay: {
+				id: EVENT_SRC_PER_DAY_ID,
+				url: eventsPerDayUrl,
+				success: ( response ) => response.data,
+				eventDataTransform( eventData ) {
+					eventData.title = pluralize(
+						eventData.anzahl,
+						' Platz frei',
+						' Plätze frei'
+					);
+					eventData.color =
+						eventData.anzahl <= 2 ? 'yellow' : 'green';
+					eventData.textColor =
+						eventData.anzahl <= 2 ? 'black' : 'white';
+					return eventData;
+				},
+			},
+		};
+
+		const getEventSourceForViewType = {
+			dayGridMonth: sources[ EVENT_SRC_PER_DAY_ID ],
+			timeGridDay: sources[ EVENT_SRC_PER_TIMESLOT_ID ],
+			listMonth: sources[ EVENT_SRC_PER_TIMESLOT_ID ],
+		};
 
 		const staticCalendarOptions = {
 			plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
-			events: {
-				url: eventsUrl,
-				success( response ) {
-					const events = response.data;
-					Array.prototype.slice
-						.call( events )
-						.forEach(
-							( event ) =>
-								( event.title = pluralize(
-									event.anzahl,
-									' Platz verfügbar',
-									' Plätze verfügbar'
-								) )
-						);
-					return events;
-				},
+			events: sources[ EVENT_SRC_PER_DAY_ID ],
+			async viewDidMount( arg ) {
+				const viewType = arg.view.type;
+				setActiveSource(
+					calendar,
+					getEventSourceForViewType[ viewType ]
+				);
 			},
 		};
 
@@ -87,5 +123,17 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 function pluralize( count, singularString, pluralString ) {
 	return count + ( count === 1 ? singularString : pluralString );
+}
+
+function setActiveSource( calendar, newSource ) {
+	const oldSources = calendar.getEventSources();
+	for ( const oldSource of oldSources ) {
+		if ( oldSource.id !== newSource.id ) {
+			oldSource.remove();
+		}
+	}
+	if ( ! calendar.getEventSourceById( newSource.id ) ) {
+		calendar.addEventSource( newSource );
+	}
 }
 /* eslint-enable no-console */

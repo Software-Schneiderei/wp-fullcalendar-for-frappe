@@ -41,7 +41,10 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js',
 		'attributes' => array(
-			'eventsUrl' => array(
+			'eventsPerTimeslotUrl' => array(
+				'type' => 'string'
+			),
+			'eventsPerDayUrl' => array(
 				'type' => 'string'
 			),
 			'calendarOptions' => array(

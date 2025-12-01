@@ -36,7 +36,8 @@ import { PanelBody, TextControl, TextareaControl } from '@wordpress/components';
  */
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { eventsUrl, calendarOptions } = attributes;
+	const { eventsPerTimeslotUrl, eventsPerDayUrl, calendarOptions } =
+		attributes;
 	const exampleCalendarOptions = `{
 	"locale": "de",
 	"firstDay": 1
@@ -51,16 +52,31 @@ export default function Edit( { attributes, setAttributes } ) {
 					<TextControl
 						__next40pxDefaultSize
 						label={ __(
-							'URL für Termine',
+							'URL für Termine pro Zeitslot',
 							'fullcalendar-for-frappe'
 						) }
 						help={ __(
 							'Response must be a JSON-object with a "data" key as the root node',
 							'fullcalendar-for-frappe'
 						) }
-						value={ eventsUrl || '' }
+						value={ eventsPerTimeslotUrl || '' }
 						onChange={ ( value ) =>
-							setAttributes( { eventsUrl: value } )
+							setAttributes( { eventsPerTimeslotUrl: value } )
+						}
+					/>
+					<TextControl
+						__next40pxDefaultSize
+						label={ __(
+							'URL für Termine pro Tag',
+							'fullcalendar-for-frappe'
+						) }
+						help={ __(
+							'Response must be a JSON-object with a "data" key as the root node',
+							'fullcalendar-for-frappe'
+						) }
+						value={ eventsPerDayUrl || '' }
+						onChange={ ( value ) =>
+							setAttributes( { eventsPerDayUrl: value } )
 						}
 					/>
 					<TextareaControl
