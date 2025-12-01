@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'software-schneiderei/fullcalendar-for-frappe',
-		'version' => '0.1.0',
+		'version' => '0.2.0',
 		'title' => 'Fullcalendar',
 		'category' => 'widgets',
 		'icon' => 'calendar-alt',
