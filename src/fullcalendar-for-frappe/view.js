@@ -104,6 +104,10 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					getEventSourceForViewType[ viewType ]
 				);
 			},
+			eventClick: function ( info ) {
+				const calendar = info.view.calendar;
+				calendar.changeView( 'timeGridDay', info.event.start );
+			},
 		};
 
 		root.appendChild( calendarEl );

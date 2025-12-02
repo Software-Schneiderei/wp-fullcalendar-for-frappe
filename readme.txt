@@ -39,6 +39,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+= 0.2.1 =
+* Added navigation to day view when clicking event in month view
+
 = 0.2.0 =
 
 * Added separate URL for appointments per day (shown in month view)
